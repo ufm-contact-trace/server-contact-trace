@@ -10,13 +10,15 @@ services:
     ports:
       - 5000:5000
     environment:
+      REDIS_PORT: 6379
       APP_ENV: "prod"
       APP_DEBUG: "True"
       APP_PORT: 5000
-      MONGODB_DATABASE: flaskdb
-      MONGODB_USERNAME: admin
-      MONGODB_PASSWORD: admin
-      MONGODB_HOSTNAME: mongodb
+      MONGODB_DATABASE: "flaskdb"
+      MONGODB_USERNAME: "admin"
+      MONGODB_PASSWORD: "admin"
+      MONGODB_HOSTNAME: "mongodb"
+      REDIS_CHANNEL: "mongo"
     volumes:
       - appdata:/app1/
     depends_on:
@@ -35,6 +37,7 @@ services:
     ports:
       - 8080:8080
     environment:
+      REDIS_PORT: 6379
       APP2_ENV: "prod"
       APP2_DEBUG: "True"
       APP2_PORT: 8080
@@ -60,14 +63,16 @@ services:
       MONDODB_LOG_DIR: /dev/null
     volumes:
       - mongodbdata:/data/db
+    ports:
+      - 27017:27017
     networks:
       - backend
   
   redis:
-    image: redis
-    ports:
+      image: redis
+      ports:
       - 6379:6379
-    networks:
+      networks:
       - backend
 
 networks:
