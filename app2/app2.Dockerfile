@@ -17,7 +17,7 @@ ADD . /app/
 
 # USER www
 
-EXPOSE 8080
+EXPOSE 8282
 
 # CMD [ "gunicorn", "-w", "4", "--bind", "0.0.0.0:5000", "wsgi"]
 

@@ -1,13 +1,32 @@
 import os, redis,  threading, asyncio, json
 from flask import Flask, request, jsonify
+from flask_pymongo import PyMongo, MongoClient, ObjectId
 
 ENVIRONMENT_DEBUG = os.environ.get("APP2_DEBUG", True)
-ENVIRONMENT_PORT = os.environ.get("APP2_PORT", 8080)
+ENVIRONMENT_PORT = os.environ.get("APP2_PORT", 8282)
 REDIS_PORT = os.environ.get("REDIS_PORT", 6379)
 REDIS_CHANNEL = os.environ.get("REDIS_CHANNEL", 'mongo')
 
 application = Flask(__name__)
 
+
+"""
+MongoDB setup
+"""
+# application.config["MONGO_URI"] = 'mongodb://' + os.environ['MONGODB_USERNAME'] + ':' + os.environ['MONGODB_PASSWORD'] + '@' + os.environ['MONGODB_HOSTNAME'] + ':27017/' + os.environ['MONGODB_DATABASE']
+# mongo = PyMongo(application)
+# db = mongo.db
+client = MongoClient(host=os.environ['MONGODB_HOSTNAME'],
+                     port=27017,
+                     username=os.environ['MONGODB_USERNAME'],
+                     password=os.environ['MONGODB_PASSWORD'],
+                     authSource="admin")
+db = client['flaskdb']
+collection = db["data"]
+
+"""
+Redis setup
+"""
 redis = redis.StrictRedis(host="redis", port=REDIS_PORT, db=0)
 pubsub = redis.pubsub(ignore_subscribe_messages=True)
 channel =  REDIS_CHANNEL
@@ -21,6 +40,22 @@ def index():
         message='Welcome to the Dockerized Flask MongoDB app!'
     )
 
+def query_mongo(idListString):
+    idList = idListString.split()
+
+    for eachId in idList:
+        print(f"eachID: {eachId}")
+
+        query_result = collection.find({"_id": ObjectId(eachId)})
+        print(f"query_result: {query_result}")
+        
+        for doc in query_result:
+            for contact in doc['contacts']:
+                print(f"key: {contact['key']}")
+                print(f"email: {redis.get(contact['key'])}")
+                print(f"timestamp: {contact['timestamp']}\n")
+
+
 
 def message_handler(message):
     """Converts message string to JSON.
@@ -31,7 +66,8 @@ def message_handler(message):
     """
     json_message = None
     message_data = message.get('data').decode('UTF-8')
-    print(f"MY HANDLER: {message_data}")
+    query_mongo(message_data)
+    print(f"PUBSUB MESSAGE: {message_data}")
 
 
 def asyncSUB():
@@ -56,15 +92,15 @@ def asyncSUB():
     message = pubsub.get_message()
     print(f"asyncSUB: message: {message}")
 
-def process():
-    """Process messages from the pubsub stream."""
-    pubsub.subscribe(channel)
-    for raw_message in pubsub.listen():
-        if raw_message:
-            print(f"raw_message: {raw_message}")
-            continue
-        message = json.loads(raw_message["data"])
-        print(message)
+# def process():
+#     """Process messages from the pubsub stream."""
+#     pubsub.subscribe(channel)
+#     for raw_message in pubsub.listen():
+#         if raw_message:
+#             print(f"raw_message: {raw_message}")
+#             continue
+#         message = json.loads(raw_message["data"])
+#         print(message)
 
 if __name__ == "__main__":
     asyncSUB()

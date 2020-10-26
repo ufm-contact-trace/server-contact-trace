@@ -35,12 +35,17 @@ services:
     container_name: flask2
     restart: unless-stopped
     ports:
-      - 8080:8080
+      - 8282:8282
     environment:
       REDIS_PORT: 6379
       APP2_ENV: "prod"
       APP2_DEBUG: "True"
-      APP2_PORT: 8080
+      APP2_PORT: 8282
+      MONGODB_DATABASE: "flaskdb"
+      MONGODB_USERNAME: "admin"
+      MONGODB_PASSWORD: "admin"
+      MONGODB_HOSTNAME: "mongodb"
+      REDIS_CHANNEL: "mongo"
     volumes:
       - appdata:/app2/
     depends_on:

@@ -38,15 +38,33 @@ def index():
         message='Welcome to the Dockerized Flask MongoDB app!'
     )
 
+
+@application.route('/sign-up', methods=['POST'])
+def sign_up():
+    data = request.get_json(force=True)
+    hashed_email = data.get("hashed_email")
+    email = data.get("email")
+    redis.set(hashed_email, email)
+
+    return jsonify(
+        status=True,
+        message='Sign up complete!'
+    ), 200
+
 @application.route('/contact', methods=['POST'])
 def insert_contact():
+    insertedIDs = None
     data = request.get_json(force=True)
-    contactID = collection.insert_one(data)
-    contactID = contactID.inserted_id
+    if isinstance(data, list):
+        insertedIDs = collection.insert_many(data).inserted_ids
+        contactID = ' '.join([str(elem) for elem in insertedIDs])
+    else:
+        insertedIDs = collection.insert_one(data).inserted_id
+        contactID = insertedIDs
     # pubsub = redis.pubsub(ignore_subscribe_messages=True)
+    
     redis.publish(channel, f"{contactID}")
-    print("andres")
-    mongoMessage = f'Contacto {contactID} saved successfully!'
+    mongoMessage = f'The following contacts were saved succesfully: {contactID}'
     return jsonify(
         status=True,
         message=mongoMessage
