@@ -61,7 +61,6 @@ def insert_contact():
     else:
         insertedIDs = collection.insert_one(data).inserted_id
         contactID = insertedIDs
-    # pubsub = redis.pubsub(ignore_subscribe_messages=True)
     
     redis.publish(channel, f"{contactID}")
     mongoMessage = f'The following contacts were saved succesfully: {contactID}'

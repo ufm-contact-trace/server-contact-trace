@@ -44,16 +44,14 @@ def query_mongo(idListString):
     idList = idListString.split()
 
     for eachId in idList:
-        print(f"eachID: {eachId}")
-
         query_result = collection.find({"_id": ObjectId(eachId)})
-        print(f"query_result: {query_result}")
-        
+
         for doc in query_result:
             for contact in doc['contacts']:
+                print("\n")
                 print(f"key: {contact['key']}")
-                print(f"email: {redis.get(contact['key'])}")
-                print(f"timestamp: {contact['timestamp']}\n")
+                print(f"\temail: {redis.get(contact['key']).decode('UTF-8')}")
+                print(f"\ttimestamp: {contact['timestamp']}")
 
 
 
@@ -67,7 +65,7 @@ def message_handler(message):
     json_message = None
     message_data = message.get('data').decode('UTF-8')
     query_mongo(message_data)
-    print(f"PUBSUB MESSAGE: {message_data}")
+    print(f"\n\nPUBLISHER: {message_data}\n\n")
 
 
 def asyncSUB():
@@ -90,7 +88,7 @@ def asyncSUB():
     pubsub.subscribe(**{channel: message_handler})
     thread = pubsub.run_in_thread(sleep_time=0.1, daemon=True)
     message = pubsub.get_message()
-    print(f"asyncSUB: message: {message}")
+    print(f"\n\nSUBSCRIBER MESSAGE: {message}")
 
 # def process():
 #     """Process messages from the pubsub stream."""
