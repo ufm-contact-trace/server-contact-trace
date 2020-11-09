@@ -1,4 +1,4 @@
-import os, redis,  threading, asyncio, json
+import os, redis,  threading, asyncio, json, requests
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo, MongoClient, ObjectId
 
@@ -6,7 +6,9 @@ ENVIRONMENT_DEBUG = os.environ.get("APP2_DEBUG", True)
 ENVIRONMENT_PORT = os.environ.get("APP2_PORT", 8282)
 REDIS_PORT = os.environ.get("REDIS_PORT", 6379)
 REDIS_CHANNEL = os.environ.get("REDIS_CHANNEL", 'mongo')
+REDIS_CHANNEL = os.environ.get("REDIS_CHANNEL", 'mongo')
 REDIS_CHANNEL_NOTIFY = os.environ.get("REDIS_CHANNEL_NOTIFY", 'notify')
+
 
 application = Flask(__name__)
 
@@ -42,28 +44,15 @@ def index():
         message='Welcome to the Dockerized Flask MongoDB app!'
     )
 
-def query_mongo(idListString):
-    idList = idListString.split()
-
-    for eachId in idList:
-        query_result = collection.find({"_id": ObjectId(eachId)})
-
-        for doc in query_result:
-            for contact in doc['contacts']:
-                email = redis.get(contact['key']).decode('UTF-8')
-                print("\n")
-                print(f"key: {contact['key']}")
-                print(f"\temail: {email}")
-                print(f"\ttimestamp: {contact['timestamp']}")
-                analyze(email, contact['timestamp'])
-
-    
-def analyze(email, timestamp):
+def send_email(email):
     print(email)
-    print(timestamp)
-    #if timestamp < 15 days, then publish info to notify 
-    redis.publish(channel_notify, f"{email}")
-
+    return requests.post(
+        "https://api.mailgun.net/v3/YOUR_DOMAIN_NAME/messages",
+        auth=("api", "YOUR_API_KEY"),
+        data={"from": "UFM Contact Trace <mailgun@YOUR_DOMAIN_NAME>",
+              "to": [email, "YOU@YOUR_DOMAIN_NAME"],
+              "subject": "Notify",
+              "text": "You've been in contact with some potential case of COVID19"})
 
 
 def message_handler(message):
@@ -75,7 +64,7 @@ def message_handler(message):
     """
     json_message = None
     message_data = message.get('data').decode('UTF-8')
-    query_mongo(message_data)
+    send_email(message_data)
     print(f"\n\nPUBLISHER: {message_data}\n\n")
 
 
@@ -96,7 +85,7 @@ def asyncSUB():
     idle in order to enable multiple applications to be run 
     simultaneously.
     """
-    pubsub.subscribe(**{channel: message_handler})
+    pubsub.subscribe(**{channel_notify: message_handler})
     thread = pubsub.run_in_thread(sleep_time=0.1, daemon=True)
     message = pubsub.get_message()
     print(f"\n\nSUBSCRIBER MESSAGE: {message}")

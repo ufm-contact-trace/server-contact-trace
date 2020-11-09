@@ -19,6 +19,7 @@ services:
       MONGODB_PASSWORD: "admin"
       MONGODB_HOSTNAME: "mongodb"
       REDIS_CHANNEL: "mongo"
+      REDIS_CHANNEL_NOTIFY: "notify"
     volumes:
       - appdata:/app1/
     depends_on:
@@ -46,8 +47,37 @@ services:
       MONGODB_PASSWORD: "admin"
       MONGODB_HOSTNAME: "mongodb"
       REDIS_CHANNEL: "mongo"
+      REDIS_CHANNEL_NOTIFY: "notify"
     volumes:
       - appdata:/app2/
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - frontend
+      - backend
+
+  flask3:
+    build:
+      context: app3/
+      dockerfile: app3.Dockerfile
+    container_name: flask3
+    restart: unless-stopped
+    ports:
+      - 8282:8282
+    environment:
+      REDIS_PORT: 6379
+      APP2_ENV: "prod"
+      APP2_DEBUG: "True"
+      APP2_PORT: 8282
+      MONGODB_DATABASE: "flaskdb"
+      MONGODB_USERNAME: "admin"
+      MONGODB_PASSWORD: "admin"
+      MONGODB_HOSTNAME: "mongodb"
+      REDIS_CHANNEL: "mongo"
+      REDIS_CHANNEL_NOTIFY: "notify"
+    volumes:
+      - appdata:/app3/
     depends_on:
       - mongodb
       - redis
