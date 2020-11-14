@@ -1,0 +1,155 @@
+<style>
+body {
+    font-family: 'Roboto';font-size: 16px;
+}
+
+.aboutus-section {
+    padding: 90px 0;
+}
+.aboutus-title {
+    font-size: 30px;
+    letter-spacing: 0;
+    line-height: 32px;
+    margin: 0 0 39px;
+    padding: 0 0 11px;
+    position: relative;
+    text-transform: uppercase;
+    color: #000;
+}
+.aboutus-title::after {
+    background: #115799 none repeat scroll 0 0;
+    bottom: 0;
+    content: "";
+    height: 2px;
+    left: 0;
+    position: absolute;
+    width: 54px;
+}
+.aboutus-text {
+    color: #606060;
+    font-size: 13px;
+    line-height: 22px;
+    margin: 0 0 35px;
+}
+
+a:hover, a:active {
+    color: #115799;
+    text-decoration: none;
+    outline: 0;
+}
+.aboutus-more {
+    border: 1px solid #115799;
+    border-radius: 25px;
+    color: #115799;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0;
+    padding: 7px 20px;
+    text-transform: uppercase;
+}
+.feature .feature-box .iconset {
+    background: #fff none repeat scroll 0 0;
+    float: left;
+    position: relative;
+    width: 18%;
+}
+.feature .feature-box .iconset::after {
+    background: #115799 none repeat scroll 0 0;
+    content: "";
+    height: 150%;
+    left: 43%;
+    position: absolute;
+    top: 100%;
+    width: 1px;
+}
+
+.feature .feature-box .feature-content h4 {
+    color: #0f0f0f;
+    font-size: 18px;
+    letter-spacing: 0;
+    line-height: 22px;
+    margin: 0 0 5px;
+}
+
+
+.feature .feature-box .feature-content {
+    float: left;
+    padding-left: 28px;
+    width: 78%;
+}
+.feature .feature-box .feature-content h4 {
+    color: #0f0f0f;
+    font-size: 18px;
+    letter-spacing: 0;
+    line-height: 22px;
+    margin: 0 0 5px;
+}
+.feature .feature-box .feature-content p {
+    color: #606060;
+    font-size: 13px;
+    line-height: 22px;
+}
+.icon {
+    color : #116599;
+    padding:0px;
+    font-size:40px;
+    border: 1px solid #115799;
+    border-radius: 100px;
+    color: #116599;
+    font-size: 28px;
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+    width: 70px;
+}
+</style>
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <div class="aboutus-section" >
+        <div class="container" >
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="aboutus">
+                        <h2 class="aboutus-title">Nuestro equipo</h2>
+                        <p class="aboutus-text">Somos alumnos de tercer año de la carrera de Ingeniería en Computer Science de la Universidad Francisco Marroquín</p>
+
+                        <ol>
+                            <li>Lindsey Maite de la Roca</li>
+                            <li>Enrique Andrés Bolaños</li>
+                            <li>Alejandra Lemus Delcompare</li>
+                            <li>Katherine Mazariegos Guerra</li>
+                            <li>Daniel Ernesto Hernández</li>
+                            <li>Tirso Córdova</li>
+                            <li>Boris Rendón Carrera</li>
+                            <li>Abner Xocop Chacach</li>
+                            <li>Etson Guerrero</li>
+                            <li>Fernandojosé Boiton</li>
+                        </ol>
+
+                        <a class="aboutus-more" href="https://github.com/Covid-relief" target="_blank">Nuestro repositorio</a>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="aboutus-banner" align="center">
+                        <img src="../static/assets/csnuevo.png" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

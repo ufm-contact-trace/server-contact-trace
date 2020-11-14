@@ -1,0 +1,408 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+{% extends "layout.html" %}
+
+{% block content %}
+<script>
+    $(document).ready(function(){
+        $(".aprobar").click(function(){
+            var span_text = $(this).find('span').text();
+            var id = span_text.substring(
+                span_text.lastIndexOf("post=") + 5, 
+                span_text.lastIndexOf("&")
+            );
+            
+            var category = span_text.substring(
+                span_text.lastIndexOf("category=") + 9, 
+                span_text.length
+            );
+
+            $.get("/approve?"+$(this).find('span').text(), function(data, status){
+                if(data.response == 200) {
+                    $.get("/notification", function(data, status){
+                        console.log(data)
+                    })
+                    alert("Publicación aprobada");
+                    $('#'+id).hide()
+                    if(category=='business'){
+                        var bc = $('#business_count')
+                        if(bc.text() == 1){
+
+                            location.reload();
+
+
+                        } else {
+
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
+                    if(category=='tecnolog%C3%ADa'){
+                        var bc = $('#tecnologia_count')
+                        if(bc.text() == 1){
+
+                            location.reload();
+
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
+                    if(category=='psicolog%C3%ADa'){
+                        var bc = $('#psicologia_count')
+                        if(bc.text() == 1){
+
+                            location.reload();
+
+
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
+                    if(category=='medicina'){
+                        var bc = $('#medicina_count')
+                        if(bc.text() == 1){
+
+                            location.reload();
+
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
+                } else {
+                    alert("Ha ocurrido un error, por favor intenta más tarde");
+                }
+            });
+        });
+
+        $(".denegar").click(function(){
+            var span_text = $(this).find('span').text();
+            var id = span_text.substring(
+                span_text.lastIndexOf("post=") + 5, 
+                span_text.lastIndexOf("&")
+            );
+
+            var category = span_text.substring(
+                span_text.lastIndexOf("category=") + 9, 
+                span_text.length
+            );
+
+            $.get("/deny?"+$(this).find('span').text(), function(data, status){
+                if(data.response == 200) {
+                    alert("Publicación denegada");
+                    $('#'+id).hide()
+                    if(category=='business'){
+                        var bc = $('#business_count')
+                        if(bc.text() == 1){
+
+
+                            location.reload();
+
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
+                    if(category=='tecnolog%C3%ADa'){
+                        var bc = $('#tecnologia_count')
+                        if(bc.text() == 1){
+                            location.reload();
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
+                    if(category=='psicolog%C3%ADa'){
+                        var bc = $('#psicologia_count')
+                        if(bc.text() == 1){
+                            location.reload();
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
+                    if(category=='medicina'){
+                        var bc = $('#medicina_count')
+                        if(bc.text() == 1){
+                            location.reload();
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
+                } else {
+                    alert("Ha ocurrido un error, por favor intenta más tarde");
+                }
+            });
+        });
+});
+</script>
+<!--
+BUSINESS
+-->
+    <h1 align="left">Business</h1>
+
+ {% if business %}
+
+     <div id="container" align="center">
+    {% set count = namespace(value=0) %}
+    {% for p in business %}
+        {% if p.Estado == "evaluate" %}
+        {% set count.value = count.value + 1 %}
+
+            <div id="{{p.ID}}" class="card" style="width: 450px">
+                <h5 class="card-title">{{p.Titulo}}</h5>
+                <p style="color:gray">{{p.Fecha}}</p>
+
+                {% if p.Imagen %}
+                    <img class="card-img-top" src="{{p.Imagen}}" alt="Card image cap" style="width: 450px; height: 450px" >
+                {% endif %}
+                {% if p.Video %}
+                    <video width="450" controls>
+                        <source src="{{p.Video}}" type="video/mp4">
+                        <source src="{{p.Video}}" type="video/ogg">
+                        Your browser does not support HTML video.
+                    </video>
+                {% endif %}
+                {% if p.Archivo %}
+                    <p><a href="{{p.Archivo}}" target="_blank">PDF disponible</a>.</p>
+                {% endif %}
+                {% if p.Link %}
+                    <a href="{{p.Link}}" target="_blank">Link disponible</a>
+                {% endif %}
+                <div class="card-body">
+
+                    <p class="card-text">{{p.Descripcion}}</p>
+                    <div>
+                        <a class="btn btn-success btn-lg aprobar"><span hidden>post={{p.ID}}&category=business</span>Aprobar</a>
+                        <a class="btn btn-danger btn-lg denegar"><span hidden>post={{p.ID}}&category=business</span>Denegar</a>
+                    </div>
+                </div>
+            </div>
+            <br>
+     {% endif %}
+
+   {% endfor %}
+
+     {% if  count.value == 0%}
+         <div class="noposts">
+            <img src="../static/assets/2404627.svg" />
+            <p>No hay posts de Business pendientes de revisar</p>
+         </div>
+     {% endif %}
+    <span hidden id="business_count">{{count.value}}</span>
+    </div>
+
+ {% else %}
+     <div class="noposts">
+         <img src="../static/assets/2404627.svg" />
+         <p>No hay posts de Business</p>
+     </div>
+ {% endif %}
+
+ <hr/>
+
+<!--
+MEDICINA
+-->
+
+     <h1 align="left">Medicina</h1>
+
+ {% if medicina %}
+
+     <div id="container" align="center">
+
+    {% set count = namespace(value=0) %}
+    {% for p in medicina %}
+        {% if p.Estado == "evaluate" %}
+        {% set count.value = count.value + 1 %}
+
+
+            <div id="{{p.ID}}" class="card" style="width: 450px">
+                <h5 class="card-title">{{p.Titulo}}</h5>
+                <p style="color:gray">{{p.Fecha}}</p>
+
+                {% if p.Imagen %}
+                    <img class="card-img-top" src="{{p.Imagen}}" alt="Card image cap" style="width: 450px; height: 450px" >
+                {% endif %}
+                {% if p.Video %}
+                    <video width="450" controls>
+                        <source src="{{p.Video}}" type="video/mp4">
+                        <source src="{{p.Video}}" type="video/ogg">
+                        Your browser does not support HTML video.
+                    </video>
+                {% endif %}
+                {% if p.Archivo %}
+                    <p><a href="{{p.Archivo}}" target="_blank">PDF disponible</a>.</p>
+                {% endif %}
+                {% if p.Link %}
+                    <a href="{{p.Link}}" target="_blank">Link disponible</a>
+                {% endif %}
+                <div class="card-body">
+
+                    <p class="card-text">{{p.Descripcion}}</p>
+                    <div>
+                        <a class="btn btn-success btn-lg aprobar"><span hidden>post={{p.ID}}&category=medicina</span>Aprobar</a>
+                        <a class="btn btn-danger btn-lg denegar"><span hidden>post={{p.ID}}&category=medicina</span>Denegar</a>
+                    </div>
+                </div>
+            </div>
+            <br>
+     {% endif %}
+
+   {% endfor %}
+
+     {% if  count.value == 0%}
+         <div class="noposts">
+            <img src="../static/assets/2404627.svg" />
+            <p>No hay posts de Medicina pendientes de revisar</p>
+         </div>
+     {% endif %}
+     <span hidden id="medicina_count">{{count.value}}</span>
+
+    </div>
+
+ {% else %}
+     <div class="noposts">
+         <img src="../static/assets/2404627.svg" />
+         <p>No hay posts de Medicina</p>
+     </div>
+ {% endif %}
+
+ <hr/>
+
+<!--
+PSICOLOGÍA
+-->
+
+     <h1 align="left">Psicología</h1>
+
+ {% if psicologia %}
+
+     <div id="container" align="center">
+
+    {% set count = namespace(value=0) %}
+    {% for p in psicologia %}
+        {% if p.Estado == "evaluate" %}
+        {% set count.value = count.value + 1 %}
+
+
+            <div id="{{p.ID}}" class="card" style="width: 450px">
+                <h5 class="card-title">{{p.Titulo}}</h5>
+                <p style="color:gray">{{p.Fecha}}</p>
+
+                {% if p.Imagen %}
+                    <img class="card-img-top" src="{{p.Imagen}}" alt="Card image cap" style="width: 450px; height: 450px" >
+                {% endif %}
+                {% if p.Video %}
+                    <video width="450" controls>
+                        <source src="{{p.Video}}" type="video/mp4">
+                        <source src="{{p.Video}}" type="video/ogg">
+                        Your browser does not support HTML video.
+                    </video>
+                {% endif %}
+                {% if p.Archivo %}
+                    <p><a href="{{p.Archivo}}" target="_blank">PDF disponible</a>.</p>
+                {% endif %}
+                {% if p.Link %}
+                    <a href="{{p.Link}}" target="_blank">Link disponible</a>
+                {% endif %}
+                <div class="card-body">
+
+                    <p class="card-text">{{p.Descripcion}}</p>
+                    <div>
+                        <a class="btn btn-success btn-lg aprobar"><span hidden>post={{p.ID}}&category=psicolog%C3%ADa</span>Aprobar</a>
+                        <a class="btn btn-danger btn-lg denegar"><span hidden>post={{p.ID}}&category=psicolog%C3%ADa</span>Denegar</a>
+                    </div>
+                </div>
+            </div>
+            <br>
+     {% endif %}
+
+   {% endfor %}
+
+     {% if  count.value == 0%}
+         <div class="noposts">
+            <img src="../static/assets/2404627.svg" />
+            <p>No hay posts de Psicología pendientes de revisar</p>
+         </div>
+     {% endif %}
+     <span hidden id="psicologia_count">{{count.value}}</span>
+
+    </div>
+
+ {% else %}
+     <div class="noposts">
+         <img src="../static/assets/2404627.svg" />
+         <p>No hay posts de Psicología</p>
+     </div>
+ {% endif %}
+
+ <hr/>
+
+
+<!--
+TECNOLOGÍA
+-->
+
+
+     <h1 align="left">Tecnología</h1>
+
+ {% if tecnologia %}
+
+     <div id="container" align="center">
+
+    {% set count = namespace(value=0) %}
+    {% for p in tecnologia %}
+        {% if p.Estado == "evaluate" %}
+        {% set count.value = count.value + 1 %}
+
+
+            <div id="{{p.ID}}" class="card" style="width: 450px">
+                <h5 class="card-title">{{p.Titulo}}</h5>
+                <p style="color:gray">{{p.Fecha}}</p>
+
+                {% if p.Imagen %}
+                    <img class="card-img-top" src="{{p.Imagen}}" alt="Card image cap" style="width: 450px; height: 450px" >
+                {% endif %}
+                {% if p.Video %}
+                    <video width="450" controls>
+                        <source src="{{p.Video}}" type="video/mp4">
+                        <source src="{{p.Video}}" type="video/ogg">
+                        Your browser does not support HTML video.
+                    </video>
+                {% endif %}
+                {% if p.Archivo %}
+                    <p><a href="{{p.Archivo}}" target="_blank">PDF disponible</a>.</p>
+                {% endif %}
+                {% if p.Link %}
+                    <a href="{{p.Link}}" target="_blank">Link disponible</a>
+                {% endif %}
+                <div class="card-body">
+
+                    <p class="card-text">{{p.Descripcion}}</p>
+                    <div>
+                        <a class="btn btn-success btn-lg aprobar"><span hidden>post={{p.ID}}&category=tecnolog%C3%ADa</span>Aprobar</a>
+                        <a class="btn btn-danger btn-lg denegar"><span hidden>post={{p.ID}}&category=tecnolog%C3%ADa</span>Denegar</a>
+                    </div>
+                </div>
+            </div>
+            <br>
+     {% endif %}
+
+   {% endfor %}
+
+     {% if  count.value == 0%}
+         <div class="noposts">
+            <img src="../static/assets/2404627.svg" />
+            <p>No hay posts de Tecnología pendientes de revisar</p>
+         </div>
+     {% endif %}
+     <span hidden id="tecnologia_count">{{count.value}}</span>
+
+    </div>
+
+ {% else %}
+     <div class="noposts">
+         <img src="../static/assets/2404627.svg" />
+         <p>No hay posts de Tecnología</p>
+     </div>
+ {% endif %}
+
+ <hr/>
+
+{% endblock %}
