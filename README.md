@@ -8,3 +8,5 @@ docker run -p 80:80 name
 docker run -v /Users/andresreyes/Documents/UFM/Admin-console-web/app:/home -p 80:80 name
 
 chmod 770 run.sh
+
+docker compose-up
