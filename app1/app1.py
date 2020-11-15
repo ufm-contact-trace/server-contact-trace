@@ -104,6 +104,24 @@ def insert_contact():
         message=mongoMessage
     ), 201
 
+@application.route('/notify', methods=['POST'])
+def notify_contact():
+    insertedIDs = None
+    data = request.get_json(force=True)
+    if isinstance(data, list):
+        insertedIDs = collection.insert_many(data).inserted_ids
+        contactID = ' '.join([str(elem) for elem in insertedIDs])
+    else:
+        insertedIDs = collection.insert_one(data).inserted_id
+        contactID = insertedIDs
+
+    redis.publish(channel, f"{contactID}")
+    mongoMessage = f'The following contacts were saved succesfully: {contactID}'
+    return jsonify(
+        status=True,
+        message=mongoMessage
+    ), 201
+
 
 @application.route('/todo')
 def todo():
