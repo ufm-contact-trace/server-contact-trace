@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo, MongoClient, ObjectId
 
 ENVIRONMENT_DEBUG = os.environ.get("APP2_DEBUG", True)
-ENVIRONMENT_PORT = os.environ.get("APP2_PORT", 8282)
+ENVIRONMENT_PORT = os.environ.get("APP2_PORT", 8283)
 REDIS_PORT = os.environ.get("REDIS_PORT", 6379)
 REDIS_CHANNEL = os.environ.get("REDIS_CHANNEL", 'mongo')
 REDIS_CHANNEL = os.environ.get("REDIS_CHANNEL", 'mongo')

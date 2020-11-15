@@ -29,7 +29,7 @@ firebase = pyrebase.initialize_app(config)
 # auth instance
 auth = firebase.auth()
 # real time database instance
-db = firebase.database();
+dbfb = firebase.database();
 
 # from app1.py
 
@@ -163,11 +163,11 @@ def about():
 
 @application.route("/test")
 def test():
-    business = db.child("business").get().val().values()
-    medicina = db.child("medicina").get().val().values()
-    psicologia = db.child("psicología").get().val().values()
-    tecnologia = db.child("tecnología").get().val().values()
-    approveBusiness = db.child("business").get()
+    business = dbfb.child("business").get().val().values()
+    medicina = dbfb.child("medicina").get().val().values()
+    psicologia = dbfb.child("psicología").get().val().values()
+    tecnologia = dbfb.child("tecnología").get().val().values()
+    approveBusiness = dbfb.child("business").get()
     # print(allposts.val(), file=sys.stderr)
     return render_template("test.html", business=business, medicina=medicina, psicologia=psicologia,
                            tecnologia=tecnologia,
@@ -178,7 +178,7 @@ def test():
 def aprobar():
     business = []
     business_keys = []
-    business_response = db.child("business").get()
+    business_response = dbfb.child("business").get()
     counter = 0
     for keys in business_response.val():
         print(type(keys))
@@ -190,7 +190,7 @@ def aprobar():
 
     medicina = []
     medicina_keys = []
-    medicina_response = db.child("medicina").get()
+    medicina_response = dbfb.child("medicina").get()
     counter = 0
     for keys in medicina_response.val():
         print(type(keys))
@@ -204,7 +204,7 @@ def aprobar():
 
     psicologia = []
     psicologia_keys = []
-    psicologia_response = db.child("psicología").get()
+    psicologia_response = dbfb.child("psicología").get()
     counter = 0
     for keys in psicologia_response.val():
         print(type(keys))
@@ -216,7 +216,7 @@ def aprobar():
 
     tecnologia = []
     tecnologia_keys = []
-    tecnologia_response = db.child("tecnología").get()
+    tecnologia_response = dbfb.child("tecnología").get()
     counter = 0
     for keys in tecnologia_response.val():
         print(type(keys))
