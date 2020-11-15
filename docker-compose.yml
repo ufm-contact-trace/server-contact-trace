@@ -8,7 +8,7 @@ services:
     container_name: flask1
     restart: unless-stopped
     ports:
-      - 5000:5000
+      - 80:80
     environment:
       REDIS_PORT: 6379
       APP_ENV: "prod"
@@ -64,12 +64,12 @@ services:
     container_name: flask3
     restart: unless-stopped
     ports:
-      - 8282:8282
+      - 8283:8283
     environment:
       REDIS_PORT: 6379
       APP2_ENV: "prod"
       APP2_DEBUG: "True"
-      APP2_PORT: 8282
+      APP2_PORT: 8283
       MONGODB_DATABASE: "flaskdb"
       MONGODB_USERNAME: "admin"
       MONGODB_PASSWORD: "admin"

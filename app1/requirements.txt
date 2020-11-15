@@ -1,4 +1,11 @@
-Flask==1.0.2
 Flask-PyMongo==2.2.0
 requests==2.20.1
 redis
+pytest
+Flask
+gunicorn==19.9.0
+python-firebase
+pyrebase
+firebase
+jinja2
+pyfcm
