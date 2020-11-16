@@ -88,17 +88,44 @@ def sign_up():
 
 @application.route('/contact', methods=['POST'])
 def insert_contact():
-    insertedIDs = None
+    # insertedIDs = None
     data = request.get_json(force=True)
-    if isinstance(data, list):
-        insertedIDs = collection.insert_many(data).inserted_ids
-        contactID = ' '.join([str(elem) for elem in insertedIDs])
-    else:
-        insertedIDs = collection.insert_one(data).inserted_id
-        contactID = insertedIDs
+    # if isinstance(data, list):
+    #     insertedIDs = collection.insert_many(data).inserted_ids
+    #     contactID = ' '.join([str(elem) for elem in insertedIDs])
+    # else:
+    #     insertedIDs = collection.insert_one(data).inserted_id
+    #     contactID = insertedIDs
 
-    redis.publish(channel, f"{contactID}")
-    mongoMessage = f'The following contacts were saved succesfully: {contactID}'
+    # redis.publish(channel, f"{contactID}")
+    col = collection.find({'user': data.get('user'), 'day': data.get('day')})
+    list_collection = list(collection.find({'user': data.get('user'), 'day': data.get('day')}))
+
+    if len(list_collection) == 0:
+        data_list = 1
+        insertedIDs = collection.insert_one(data).inserted_id
+        users_contacts = list_collection
+    else:
+        data_list = 0
+        users_contacts = dict(list_collection[0]).get('contacts')
+        new_contacts = data.get('contacts')
+        total_contacts = users_contacts + new_contacts
+        # for each in new_contacts:
+        collection.update_one(
+            {
+                'user': data.get('user'), 'day': data.get('day')
+            },
+            {
+                '$set': {'contacts': total_contacts}
+            })
+        list_collection = list(collection.find({'user': data.get('user'), 'day': data.get('day')}))
+
+        
+        
+
+    # data_list = list(collection.find({'user': data.get('user'), 'day': data.get('day')}))
+    mongoMessage = f"The following contacts were saved succesfully: {data_list} \n {list_collection}"
+
     return jsonify(
         status=True,
         message=mongoMessage
