@@ -39,7 +39,7 @@ global_json = None
 def index():
     return jsonify(
         status=True,
-        message='Welcome to the Dockerized Flask MongoDB app!'
+        message='Welcome to the non Dockerized Flask MongoDB app!'
     )
 
 def query_mongo(idListString):

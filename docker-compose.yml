@@ -22,6 +22,7 @@ services:
       REDIS_CHANNEL_NOTIFY: "notify"
     volumes:
       - appdata:/app1/
+      - ./app1/:/app/
     depends_on:
       - mongodb
       - redis
@@ -50,6 +51,7 @@ services:
       REDIS_CHANNEL_NOTIFY: "notify"
     volumes:
       - appdata:/app2/
+      - ./app2/:/app/
     depends_on:
       - mongodb
       - redis
@@ -78,6 +80,7 @@ services:
       REDIS_CHANNEL_NOTIFY: "notify"
     volumes:
       - appdata:/app3/
+      - ./app3/:/app/
     depends_on:
       - mongodb
       - redis
