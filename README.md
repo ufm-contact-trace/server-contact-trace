@@ -10,3 +10,9 @@ docker run -v /Users/andresreyes/Documents/UFM/Admin-console-web/app:/home -p 80
 chmod 770 run.sh
 
 docker compose-up
+
+docker-compose up --build --force-recreate
+
+docker image prune -a
+
+docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
