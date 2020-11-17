@@ -172,15 +172,15 @@ def asyncSUB():
 #         print(message)
 
 
-def send_email(email):
-    print(f"Sending email to: {email}")
-    return requests.post(
-        "https://api.mailgun.net/v3/sandboxc81fd26a81de4c27abb470681b17418d.mailgun.org/messages",
-        auth=("api", "6340ce56e3ccef12c058cb910d94d158-2af183ba-36548ea8"),
-        data={"from": "mailgun@sandboxc81fd26a81de4c27abb470681b17418d.mailgun.org",
-              "to": [email],
-              "subject": "Notificación de exposición a COVID-19",
-              "text": "Ha sido expuesto a una persona con prueba de COVID-19 POSITIVA. \nFavor tomar las respectivas precauciones."})
+# def send_email(email):
+#     print(f"Sending email to: {email}")
+#     return requests.post(
+#         "https://api.mailgun.net/v3/sandboxc81fd26a81de4c27abb470681b17418d.mailgun.org/messages",
+#         auth=("api", "APIKEY"),
+#         data={"from": "mailgun@sandboxc81fd26a81de4c27abb470681b17418d.mailgun.org",
+#               "to": [email],
+#               "subject": "Notificación de exposición a COVID-19",
+#               "text": "Ha sido expuesto a una persona con prueba de COVID-19 POSITIVA. \nFavor tomar las respectivas precauciones."})
 
 
 if __name__ == "__main__":
