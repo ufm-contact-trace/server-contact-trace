@@ -16,4 +16,4 @@ ADD . /app/
 # USER www
 EXPOSE 80
 # CMD [ "gunicorn", "-w", "4", "--bin
-CMD ["python", "app1.py"]
+CMD ["python","-u", "app1.py"]

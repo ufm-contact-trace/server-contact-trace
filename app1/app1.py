@@ -86,31 +86,33 @@ def sign_up():
     ), 200
 
 
+@application.route('/sign-up-array', methods=['POST'])
+def sign_up_array():
+    data = request.get_json(force=True)
+    for each in data:
+        hashed_email = each.get("hashed_email")
+        email = each.get("email")
+        redis.set(hashed_email, email)
+
+    return jsonify(
+        status=True,
+        message='Sign up complete!'
+    ), 200
+
+
 @application.route('/contact', methods=['POST'])
 def insert_contact():
-    # insertedIDs = None
     data = request.get_json(force=True)
-    # if isinstance(data, list):
-    #     insertedIDs = collection.insert_many(data).inserted_ids
-    #     contactID = ' '.join([str(elem) for elem in insertedIDs])
-    # else:
-    #     insertedIDs = collection.insert_one(data).inserted_id
-    #     contactID = insertedIDs
-
-    # redis.publish(channel, f"{contactID}")
-    col = collection.find({'user': data.get('user'), 'day': data.get('day')})
     list_collection = list(collection.find({'user': data.get('user'), 'day': data.get('day')}))
 
     if len(list_collection) == 0:
-        data_list = 1
+        status = 1
         insertedIDs = collection.insert_one(data).inserted_id
-        users_contacts = list_collection
     else:
-        data_list = 0
+        status = 0
         users_contacts = dict(list_collection[0]).get('contacts')
         new_contacts = data.get('contacts')
         total_contacts = users_contacts + new_contacts
-        # for each in new_contacts:
         collection.update_one(
             {
                 'user': data.get('user'), 'day': data.get('day')
@@ -121,10 +123,7 @@ def insert_contact():
         list_collection = list(collection.find({'user': data.get('user'), 'day': data.get('day')}))
 
         
-        
-
-    # data_list = list(collection.find({'user': data.get('user'), 'day': data.get('day')}))
-    mongoMessage = f"The following contacts were saved succesfully: {data_list} \n {list_collection}"
+    mongoMessage = f"The following contacts were saved succesfully: Status: {status} \n {list_collection}"
 
     return jsonify(
         status=True,
@@ -133,17 +132,33 @@ def insert_contact():
 
 @application.route('/notify', methods=['POST'])
 def notify_contact():
-    insertedIDs = None
+    insertedIDs = []
     data = request.get_json(force=True)
-    if isinstance(data, list):
-        insertedIDs = collection.insert_many(data).inserted_ids
-        contactID = ' '.join([str(elem) for elem in insertedIDs])
-    else:
-        insertedIDs = collection.insert_one(data).inserted_id
-        contactID = insertedIDs
+    col = collection.find({'user': data.get('user'), 'day': data.get('day')})
+    list_collection = list(collection.find({'user': data.get('user'), 'day': data.get('day')}))
 
-    redis.publish(channel, f"{contactID}")
-    mongoMessage = f'The following contacts were saved succesfully: {contactID}'
+    if len(list_collection) == 0:
+        status = 1
+        insertedIDs = collection.insert_one(data).inserted_id
+    else:
+        status = 0
+        users_contacts = dict(list_collection[0]).get('contacts')
+        new_contacts = data.get('contacts')
+        total_contacts = users_contacts + new_contacts
+        collection.update_one(
+            {
+                'user': data.get('user'), 'day': data.get('day')
+            },
+            {
+                '$set': {'contacts': total_contacts}
+            })
+        for itm in collection.find({'user': data.get('user'), 'day': data.get('day')}):
+            insertedIDs = itm.get('_id')
+
+    redis.publish(channel, f"{insertedIDs}")
+
+    mongoMessage = f'The following contacts were saved succesfully: Status: {status} {insertedIDs}'
+
     return jsonify(
         status=True,
         message=mongoMessage

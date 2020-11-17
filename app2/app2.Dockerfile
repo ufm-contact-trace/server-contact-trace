@@ -18,8 +18,9 @@ ADD . /app/
 # USER www
 
 EXPOSE 8282
+ENV DAYS=14
 
 # CMD [ "gunicorn", "-w", "4", "--bind", "0.0.0.0:5000", "wsgi"]
 
-CMD ["python", "app2.py"]
+CMD ["python","-u", "app2.py"]
 # CMD [""]
