@@ -115,7 +115,7 @@ if __name__ == "__main__":
     # process()
     pubsub.psubscribe(channel_notify)
     for new_message in pubsub.listen():
-        print(f"for new_message: {new_message}" )
+        print(f"for new_message: {new_message}")
 
     application.run(host='0.0.0.0', port=ENVIRONMENT_PORT,
                     debug=ENVIRONMENT_DEBUG)

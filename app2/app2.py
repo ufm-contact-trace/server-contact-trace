@@ -113,7 +113,7 @@ def analyze(user, date):
     # redis.publish(channel_notify, f"{contacts}")
 
     for eachContact in contacts:
-        # redis.publish(channel_notify, f"{eachContact}")
+        redis.publish(channel_notify, f"{eachContact}")
 
       # 2014-12-13 22: 45: 01.743172
     # print("\nAnalize:")
@@ -123,7 +123,7 @@ def analyze(user, date):
     # if timestamp < 15 days, then publish info to notify
     # redis.publish(channel_notify, f"{user}")
 
-        send_email(eachContact)
+        # send_email(eachContact)
 
 
 def message_handler(message):
