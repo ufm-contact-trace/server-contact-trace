@@ -1,16 +1,3 @@
-# Admin-console-web + Server-contact-trace
-Manage web administrator console for the Covid relief - Contact trace app
-
-docker build . -t name:tag
-
-docker run -p 80:80 name
-
-docker run -v /Users/andresreyes/Documents/UFM/Admin-console-web/app:/home -p 80:80 name
-
-chmod 770 run.sh
-
-docker compose-up
-
 # Definición del Proyecto
 
 ## ¿Qué es Contact Tracing? 
@@ -35,21 +22,37 @@ En el ámbito de la salud pública, la Contact Tracing (localización de contact
 
 
 
-# Admin-console-web + Server-contact-trace
-Manage web administrator console for the Covid relief - Contact trace app
+# Correr: Admin-console-web + Server-contact-trace
 
+## Manage web administrator console for the Covid relief - Contact trace app
+```console
 docker build . -t name:tag
+```
 
+```console
 docker run -p 80:80 name
+```
 
+```console
 docker run -v /Users/andresreyes/Documents/UFM/Admin-console-web/app:/home -p 80:80 name
+```
 
+```console
 chmod 770 run.sh
+```
 
+```console
 docker compose-up
+```
 
+```console
 docker-compose up --build --force-recreate
+```
 
+```console
 docker image prune -a
+```
 
+```console
 docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
+```
