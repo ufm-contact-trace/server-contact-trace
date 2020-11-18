@@ -21,31 +21,61 @@ En el ámbito de la salud pública, la Contact Tracing (localización de contact
 
 Esta aplicación utiliza la tecnología de Google Nearby Api para encontrar personas con la aplicación instalada y que estén cerca de nosotros. Este módulo de trazabilidad está implementado en una app independiente y dentro de Covid Relief.
 
-[Covid Relief Aplicación Móvil](https://github.com/Covid-relief/Contact-trace-app)
+1. [Covid Relief Aplicación Móvil](https://github.com/Covid-relief/Contact-trace-app)
 
-[Aplicación independiente de Contact Trace](https://github.com/Covid-relief/Contact-trace-app)
+2. [Aplicación independiente de Contact Trace](https://github.com/Covid-relief/Contact-trace-app)
 
 
 ### Servicios en la nube para notificar y analizar contactos
 
-Este servidor posee rutas para enviar los contactos y guardarlos en una base de datos NoSQL, en donde se almacenan estrucutras de datos filtradas por usuario y por día. 
+Este servidor posee rutas para enviar los contactos y guardarlos en una base de datos NoSQL, en donde se almacenan estrucutras de datos filtradas por usuario y por día, esta opción se realiza automáticamente en la app cada 15 minutos y si existen más de 10 contactos para enviar. 
 
-## Galería de Imágenes del Servidor de Contact Tracing
+Al momento de que una persona resulte infectada, se tiene la opción de enviar los contactos que se tienen al momento, y el servidor extraerá de la base de datos la información de 14 días atrás. Esta data se analizará para identificar a qué personas notificar.
+
+### Galería de Imágenes del Servidor de Contact Tracing
 
 ![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s1.png)
 ![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s2.png)
 ![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s3.png)
 ![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s4.png)
 
+### Notificación enviada por el servidor
+
+![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s5.png)
+
+## Resumen de la infraestructura en un mapa
+
 # Resumen de estrategias NoSQL
+
+## Contenedores
+
+Se tienen los diferentes servicios en contenedores aislados para que sea una infraestructura "serverless". Esto permite escalabilidad y autonomía por cada uno de los contenedores, y se puede cambiar su cantidad dependiendo de la necesidad de uso. 
+
+![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s7.png)
 
 ## MongoDB
 
+Se utilizó Mongo DB para guardar la información de los contactos. Se tiene una estructura que permite tener un documento por persona por día. Este documento contiene un atributo del tipo arreglo en el cual se listan todos los contactos encontrados con su respectivo timestamp. Es importante mencionar que esta lista contiene únicamente la información encriptada necesaria para poder identificar qué contacto es a la hora de notificar. Se seleccionó esta herramiento por su versatilidad a la hora de guardar la información y tienen optimizaciones de búsqueda.
+
+![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s6.png)
+
 ## Redis Publisher - Subscriber 
+
+Se tienen dos canales de comunicación, uno para que el contenedor receptor de información notifique al contenedor que analiza que vaya a buscar la información del usuario. El segundo canal sirve para que el contenedor que analiza avise al tercer contenedor, quien es el encargado de enviar correos. Se seleccionó esta herramienta porque su servicio Publisher Subscriber se acoplaba fácilmente a los contenedores y teníamos experiencia utilizándola.
+
+## Redis Diccionario Key - Value
+
+Sirve para guardar la información de las personas y permite que haya confidencialidad. Sabemos que los contactos que se almacenan en los dispositivos están encriptados, gracias a este diccionario podemos obtener el correo de la persona asociado a un hash. Se seleccionó esta herramienta aprovechando que ya teníamos redis corriendo entre los contenedores.
 
 ## JSON SQLite 
 
+La data es almacenada en el dispositvo móvil hasta antes de enviarse al servidor. Por lo tanto, esta herramienta se seleccionó para almacenar la data de los contactos en el formato requerido por el servidor a la hora de enviarse. 
+
+![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s8.png)
+
 ## Firebase CloudStore - RealTimeDatabase
+
+Para inicio de sesión y control de registro de usuarios. Ya que se tiene el módulo corriendo dentro de Covid Relief, utilizamos los servicios de Firebase para el manejo de nuestro usuarios y le UID se manda en los jsons y se almacenan en Mongo DB.
 
 # Correr: Admin-console-web + Server-contact-trace
 
