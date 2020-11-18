@@ -41,7 +41,7 @@ Al momento de que una persona resulte infectada, se tiene la opción de enviar l
 
 ### Notificación enviada por el servidor
 
-![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s5.png)
+![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s5.png | width=100)
 
 ## Resumen de la infraestructura en un mapa
 
