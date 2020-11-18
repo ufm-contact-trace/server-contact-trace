@@ -79,6 +79,10 @@ Para inicio de sesión y control de registro de usuarios. Ya que se tiene el mó
 
 # Correr: Admin-console-web + Server-contact-trace
 
+## URL del servidor corriendo en una instancia de cómputo de AWS 
+
+http://ec2-18-216-89-33.us-east-2.compute.amazonaws.com
+
 ## Manage web administrator console for the Covid relief - Contact trace app
 ```console
 docker build . -t name:tag
