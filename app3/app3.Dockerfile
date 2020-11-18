@@ -17,9 +17,9 @@ ADD . /app/
 
 # USER www
 
-EXPOSE 8282
+EXPOSE 8383
 
 # CMD [ "gunicorn", "-w", "4", "--bind", "0.0.0.0:5000", "wsgi"]
 
-CMD ["python", "app3.py"]
+CMD ["python", "-u", "app3.py"]
 # CMD [""]

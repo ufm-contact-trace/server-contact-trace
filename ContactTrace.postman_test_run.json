@@ -1,0 +1,40 @@
+{
+	"id": "387455d3-21f9-4e3e-b80e-175fbd3a3505",
+	"name": "ContactTrace",
+	"timestamp": "2020-11-16T22:39:57.644Z",
+	"collection_id": "23c6f51b-f430-485c-b6fa-bf2e3e0c7a8a",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 0,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "2c065683-e453-4dbd-b7ac-c0c5db05c382",
+			"name": "SignUp",
+			"url": "http://localhost:80/sign-up",
+			"time": 15,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				15
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 15,
+	"collection": {
+		"requests": [
+			{
+				"id": "2c065683-e453-4dbd-b7ac-c0c5db05c382",
+				"method": "POST"
+			}
+		]
+	}
+}

@@ -1,4 +1,12 @@
-import os, redis,  threading, asyncio, json
+import os
+import redis
+import threading
+import asyncio
+import json
+import datetime
+import requests
+import time
+import dateutil.parser
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo, MongoClient, ObjectId
 
@@ -30,40 +38,92 @@ Redis setup
 """
 redis = redis.StrictRedis(host="redis", port=REDIS_PORT, db=0)
 pubsub = redis.pubsub(ignore_subscribe_messages=True)
-channel =  REDIS_CHANNEL
+channel = REDIS_CHANNEL
 channel_notify = REDIS_CHANNEL_NOTIFY
 
 global_json = None
+
 
 @application.route('/')
 def index():
     return jsonify(
         status=True,
-        message='Welcome to the Dockerized Flask MongoDB app!'
+        message='Welcome to the non Dockerized Flask MongoDB app!'
     )
+
 
 def query_mongo(idListString):
     idList = idListString.split()
+    user = ""
+    date = ""
+    contacts = []
 
     for eachId in idList:
         query_result = collection.find({"_id": ObjectId(eachId)})
 
         for doc in query_result:
-            for contact in doc['contacts']:
-                email = redis.get(contact['key']).decode('UTF-8')
-                print("\n")
-                print(f"key: {contact['key']}")
-                print(f"\temail: {email}")
-                print(f"\ttimestamp: {contact['timestamp']}")
-                analyze(email, contact['timestamp'])
+            user = doc.get('user')
+            date = doc.get('date')
+            # for contact in doc['contacts']:
+            # email = redis.get(contact['key']).decode('UTF-8')
+            # print("\n")
+            # print(f"key: {contact['key']}")
+            # print(f"\temail: {email}")
+            # print(f"\ttimestamp: {contact['timestamp']}")
 
-    
-def analyze(email, timestamp):
-    print(email)
-    print(timestamp)
-    #if timestamp < 15 days, then publish info to notify 
-    redis.publish(channel_notify, f"{email}")
+    analyze(user, date)
 
+
+def analyze(user, date):
+    contacts = []
+    today = datetime.datetime.now()
+    d = datetime.timedelta(days=int(os.environ.get('DAYS')))
+    a = today - d
+
+    col = collection.find({'user': user}).sort(
+        'date', -1).limit(int(os.environ.get('DAYS')))
+
+    for eachCol in col:
+        print(f"EachCol.day: {eachCol.get('day')}")
+        # print(f"EachCol: {eachCol}")
+        date = datetime.datetime.strptime(eachCol.get(
+            'day'), '%Y-%m-%d')
+
+        print(f"DATE: date: {date}")
+        print(f"\ttype: {type(date)}")
+        print(f"DATE: a: {a}")
+        print(f"\ttype: {type(a)}")
+
+        if date > a:
+            print("IF")
+            # print(f"EachCol: {eachCol}")
+            for contact in eachCol.get('contacts'):
+                user = redis.get(contact['key'])
+                if user is not None:
+                    user = user.decode('UTF-8')
+                    contacts.append(user)
+                else:
+                    print("user is None")
+        else:
+            print("ELSE")
+
+    contacts = list(set(contacts))
+
+    print(f"Contacts: {contacts}")
+    # redis.publish(channel_notify, f"{contacts}")
+
+    for eachContact in contacts:
+        redis.publish(channel_notify, f"{eachContact}")
+
+      # 2014-12-13 22: 45: 01.743172
+    # print("\nAnalize:")
+    # print(f"\tDays to analize: {d}")
+    # print(f"\tuser: {user}")
+    # print(f"\ttimestamp: {date}")
+    # if timestamp < 15 days, then publish info to notify
+    # redis.publish(channel_notify, f"{user}")
+
+        # send_email(eachContact)
 
 
 def message_handler(message):
@@ -76,7 +136,7 @@ def message_handler(message):
     json_message = None
     message_data = message.get('data').decode('UTF-8')
     query_mongo(message_data)
-    print(f"\n\nPUBLISHER: {message_data}\n\n")
+    print(f"\n\nPUBLISHER APP 2: {message_data}\n\n")
 
 
 def asyncSUB():
@@ -111,7 +171,20 @@ def asyncSUB():
 #         message = json.loads(raw_message["data"])
 #         print(message)
 
+
+# def send_email(email):
+#     print(f"Sending email to: {email}")
+#     return requests.post(
+#         "https://api.mailgun.net/v3/sandboxc81fd26a81de4c27abb470681b17418d.mailgun.org/messages",
+#         auth=("api", "APIKEY"),
+#         data={"from": "mailgun@sandboxc81fd26a81de4c27abb470681b17418d.mailgun.org",
+#               "to": [email],
+#               "subject": "Notificación de exposición a COVID-19",
+#               "text": "Ha sido expuesto a una persona con prueba de COVID-19 POSITIVA. \nFavor tomar las respectivas precauciones."})
+
+
 if __name__ == "__main__":
     asyncSUB()
     # process()
-    application.run(host='0.0.0.0', port=ENVIRONMENT_PORT, debug=ENVIRONMENT_DEBUG)
+    application.run(host='0.0.0.0', port=ENVIRONMENT_PORT,
+                    debug=ENVIRONMENT_DEBUG)
