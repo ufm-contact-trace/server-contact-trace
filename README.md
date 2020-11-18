@@ -25,7 +25,7 @@ Esta aplicación utiliza la tecnología de Google Nearby Api para encontrar pers
 
 2. [Aplicación independiente de Contact Trace](https://github.com/Covid-relief/Contact-trace-app)
 
-![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s10.png)
+<img src="https://github.com/Covid-relief/server-contact-trace/blob/master/images/s10.png" width="300" />
 
 ### Servicios en la nube para notificar y analizar contactos
 
