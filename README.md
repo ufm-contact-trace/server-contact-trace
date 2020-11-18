@@ -13,6 +13,12 @@ En el ámbito de la salud pública, la Contact Tracing (localización de contact
 3. Se notifica a los “contactos” sobre el infectado en un margen establecido de tiempo (e.g. 15 días).
 4. Se procede a recomendar una cuarentena a los conectados. 
 
+# Infraestructura de la solución
+
+## Detalle de las tecnologías implementadas en la solución
+
+[Repo](https://github.com/Covid-relief/Covid-relief-app)
+
 ## Galería de Imágenes del Servidor de Contact Tracing
 
 ![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s1.png)
@@ -20,7 +26,15 @@ En el ámbito de la salud pública, la Contact Tracing (localización de contact
 ![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s3.png)
 ![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s4.png)
 
+# Resumen de estrategias NoSQL
 
+## MongoDB
+
+## Redis Publisher - Subscriber 
+
+## JSON SQLite 
+
+## Firebase CloudStore - RealTimeDatabase
 
 # Correr: Admin-console-web + Server-contact-trace
 
