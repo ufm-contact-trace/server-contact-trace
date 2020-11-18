@@ -66,13 +66,13 @@ Se utilizó Mongo DB para guardar la información de los contactos. Se tiene una
 
 Se tienen dos canales de comunicación, uno para que el contenedor receptor de información notifique al contenedor que analiza que vaya a buscar la información del usuario. El segundo canal sirve para que el contenedor que analiza avise al tercer contenedor, quien es el encargado de enviar correos. Se seleccionó esta herramienta porque su servicio Publisher Subscriber se acoplaba fácilmente a los contenedores y teníamos experiencia utilizándola.
 
-![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s14.png) 
+![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s14.svg) 
 
 ## Redis Diccionario Key - Value
 
 Sirve para guardar la información de las personas y permite que haya confidencialidad. Sabemos que los contactos que se almacenan en los dispositivos están encriptados, gracias a este diccionario podemos obtener el correo de la persona asociado a un hash. Se seleccionó esta herramienta aprovechando que ya teníamos redis corriendo entre los contenedores.
 
-![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s13.png) 
+![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s13.svg) 
 
 
 ## JSON SQLite 
