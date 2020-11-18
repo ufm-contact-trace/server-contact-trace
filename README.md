@@ -44,7 +44,7 @@ Al momento de que una persona resulte infectada, se tiene la opción de enviar l
 <img src="https://github.com/Covid-relief/server-contact-trace/blob/master/images/s5.png" width="300" />
 
 ## Resumen de la infraestructura en un mapa
-![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s9.png)
+![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s9.jpeg)
 # Resumen de estrategias NoSQL
 
 ## Contenedores
