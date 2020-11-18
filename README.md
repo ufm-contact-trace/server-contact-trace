@@ -17,7 +17,18 @@ En el ámbito de la salud pública, la Contact Tracing (localización de contact
 
 ## Detalle de las tecnologías implementadas en la solución
 
-[Repo](https://github.com/Covid-relief/Covid-relief-app)
+### Aplicación móvil para dispositivos Android
+
+Esta aplicación utiliza la tecnología de Google Nearby Api para encontrar personas con la aplicación instalada y que estén cerca de nosotros. Este módulo de trazabilidad está implementado en una app independiente y dentro de Covid Relief.
+
+[Covid Relief Aplicación Móvil](https://github.com/Covid-relief/Contact-trace-app)
+
+[Aplicación independiente de Contact Trace](https://github.com/Covid-relief/Contact-trace-app)
+
+
+### Servicios en la nube para notificar y analizar contactos
+
+Este servidor posee rutas para enviar los contactos y guardarlos en una base de datos NoSQL, en donde se almacenan estrucutras de datos filtradas por usuario y por día. 
 
 ## Galería de Imágenes del Servidor de Contact Tracing
 
