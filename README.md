@@ -21,7 +21,7 @@ En el ámbito de la salud pública, la Contact Tracing (localización de contact
 
 Esta aplicación utiliza la tecnología de Google Nearby Api para encontrar personas con la aplicación instalada y que estén cerca de nosotros. Este módulo de trazabilidad está implementado en una app independiente y dentro de Covid Relief.
 
-1. [Covid Relief Aplicación Móvil](https://github.com/Covid-relief/Contact-trace-app)
+1. [Covid Relief Aplicación Móvil](https://github.com/Covid-relief/Covid-relief-app)
 
 2. [Aplicación independiente de Contact Trace](https://github.com/Covid-relief/Contact-trace-app)
 
