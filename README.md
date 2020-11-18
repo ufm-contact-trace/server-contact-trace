@@ -85,6 +85,9 @@ La data es almacenada en el dispositvo móvil hasta antes de enviarse al servido
 
 Para inicio de sesión y control de registro de usuarios. Ya que se tiene el módulo corriendo dentro de Covid Relief, utilizamos los servicios de Firebase para el manejo de nuestro usuarios y le UID se manda en los jsons y se almacenan en Mongo DB.
 
+![ContactTracing](https://github.com/Covid-relief/server-contact-trace/blob/master/images/s15.png) 
+
+
 # Correr: Admin-console-web + Server-contact-trace
 
 ## URL del servidor corriendo en una instancia de cómputo de AWS 
